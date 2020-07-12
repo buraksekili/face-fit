@@ -2,43 +2,29 @@ import React, { useState, useEffect } from "react";
 import ProcessImage from "react-imgpro";
 import { loadModels, getFullFaceDescription } from "../faceApi";
 import { useIsMount } from "../Custom Hook/useIsMount";
-import "./App.css"
-
 
 const App = () => {
-    const isMount = useIsMount();
+    const [image, setImage] = useState(null);
+    const [detectedFaces, setDetectedFaces] = useState([]);
 
+    const isMount = useIsMount();
     useEffect(() => {
         const checkIsMount = async () => {
             if (isMount) {
-                console.log("First Render");
                 await loadModels();
             } else {
                 if (image) {
-                    console.log("image is ready as: ", image);
-                    await handleImage(image);
-                    console.log("image is ready as1: ", image);
-                    setImage(image);
-                } else {
-                    console.log("i am sorry boy");
+                    await handleImage();
                 }
             }
         };
         checkIsMount();
-    });
+    }, [image]);
 
-    const [image, setImage] = useState(null);
-    const [detectedFaces, setDetectedFaces] = useState([])
-
-
-    const handleImage = async (image) => {
-        console.log("handleImage");
-        console.log("image: ", image);
+    const handleImage = async () => {
         const input = document.getElementById("input-img");
-        console.log("input: ", input);
         await getFullFaceDescription(input).then((fullDesc) => {
-            console.log("handleImage1");
-            setDetectedFaces(fullDesc)
+            setDetectedFaces(fullDesc);
         });
     };
 
@@ -46,8 +32,12 @@ const App = () => {
         <div>
             <input
                 type="file"
+                multiple={false}
+                onClick={() => {
+                    setImage(null);
+                    setDetectedFaces([]);
+                }}
                 onChange={(event) => {
-                    console.log(event.target.files[0]);
                     setImage(URL.createObjectURL(event.target.files[0]));
                 }}
             />
@@ -60,10 +50,8 @@ const App = () => {
                         id="input-img"
                         src={image ? image : "#"}
                         alt={image ? "face" : ""}
-                        style={{width:"1200px", height:"auto"}}
+                        style={{ width: "400px", height: "auto" }}
                     ></img>
-
-                    
                 </div>
             }
             {image ? (
@@ -71,27 +59,19 @@ const App = () => {
                     <div>
                         <h1>Cropped Image</h1>
                     </div>
-                    <ul>
-                        {detectedFaces.map(function(detectedFace, index){
+                    {detectedFaces.map((detectedFace) => {
+                        let width = detectedFace.detection._box.width;
+                        let height = detectedFace.detection._box.height;
+                        let x = detectedFace.detection._box.x;
+                        let y = detectedFace.detection._box.y;
 
-                                       
-                            let width =  detectedFace.detection._box.width;
-                            let height =  detectedFace.detection._box.height;
-                            let x =  detectedFace.detection._box.x;
-                            let y =  detectedFace.detection._box.y;
-
-                            return <ProcessImage
-                                    image={image}
-
-                                    crop={{
-                                        width,
-                                        height,
-                                        x,
-                                        y                                        
-                                    }}
-                                />
-                        })}
-                    </ul>
+                        return (
+                            <ProcessImage
+                                image={image}
+                                crop={{ width, height, x, y }}
+                            />
+                        );
+                    })}
                 </div>
             ) : null}
         </div>
