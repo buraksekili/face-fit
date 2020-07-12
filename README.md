@@ -1,3 +1,3 @@
 Simple image cropper in client side.
 
-https://buraksekili.github.io/crop-image/
+You can check it from here https://buraksekili.github.io/crop-image/
