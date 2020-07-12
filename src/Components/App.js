@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ProcessImage from "react-imgpro";
 import { loadModels, getFullFaceDescription } from "../faceApi";
 import { useIsMount } from "../Custom Hook/useIsMount";
+import "./App.css"
+
 
 const App = () => {
     const isMount = useIsMount();
@@ -9,11 +11,16 @@ const App = () => {
     useEffect(() => {
         const checkIsMount = async () => {
             if (isMount) {
+                console.log("First Render");
                 await loadModels();
             } else {
                 if (image) {
-                    await handleImage();
+                    console.log("image is ready as: ", image);
+                    await handleImage(image);
+                    console.log("image is ready as1: ", image);
                     setImage(image);
+                } else {
+                    console.log("i am sorry boy");
                 }
             }
         };
@@ -21,22 +28,17 @@ const App = () => {
     });
 
     const [image, setImage] = useState(null);
-    const [width, setWidth] = useState(50);
-    const [height, setHeight] = useState(50);
-    const [x, setX] = useState(0);
-    const [y, setY] = useState(0);
+    const [detectedFaces, setDetectedFaces] = useState([])
 
-    const handleImage = async () => {
+
+    const handleImage = async (image) => {
+        console.log("handleImage");
+        console.log("image: ", image);
         const input = document.getElementById("input-img");
+        console.log("input: ", input);
         await getFullFaceDescription(input).then((fullDesc) => {
-            const x = fullDesc[0].detection._box.x;
-            const y = fullDesc[0].detection._box.y;
-            const height = fullDesc[0].detection._box.height;
-            const width = fullDesc[0].detection._box.width;
-            setX(x);
-            setY(y);
-            setHeight(height);
-            setWidth(width);
+            console.log("handleImage1");
+            setDetectedFaces(fullDesc)
         });
     };
 
@@ -50,36 +52,48 @@ const App = () => {
                 }}
             />
             {
-                <img
-                    id="input-img"
-                    src={image ? image : "#"}
-                    alt={image ? "face" : ""}
-                ></img>
+                <div>
+                    <div>
+                        <h1>Your Image</h1>
+                    </div>
+                    <img
+                        id="input-img"
+                        src={image ? image : "#"}
+                        alt={image ? "face" : ""}
+                        style={{width:"1200px", height:"auto"}}
+                    ></img>
+
+                    
+                </div>
             }
             {image ? (
                 <div>
-                    <ProcessImage
-                        image={image}
-                        crop={{ width, height, x, y }}
-                    />
+                    <div>
+                        <h1>Cropped Image</h1>
+                    </div>
+                    <ul>
+                        {detectedFaces.map(function(detectedFace, index){
+
+                                       
+                            let width =  detectedFace.detection._box.width;
+                            let height =  detectedFace.detection._box.height;
+                            let x =  detectedFace.detection._box.x;
+                            let y =  detectedFace.detection._box.y;
+
+                            return <ProcessImage
+                                    image={image}
+
+                                    crop={{
+                                        width,
+                                        height,
+                                        x,
+                                        y                                        
+                                    }}
+                                />
+                        })}
+                    </ul>
                 </div>
             ) : null}
-
-            <div>
-                <span>Height: </span>
-                <input
-                    value={height}
-                    type="number"
-                    onChange={(e) => setHeight(parseInt(e.target.value))}
-                />
-
-                <span style={{ marginLeft: "10px" }}>Width: </span>
-                <input
-                    value={width}
-                    type="number"
-                    onChange={(e) => setWidth(parseInt(e.target.value))}
-                />
-            </div>
         </div>
     );
 };
