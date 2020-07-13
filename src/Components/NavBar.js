@@ -2,6 +2,7 @@ import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Logo from "../assets/face_fit_logo.png"
 
 const Styles = styled.div`
     .navbar {
@@ -23,7 +24,15 @@ export const NavBar = () => {
     return (
         <Styles>
             <Navbar expand="lg">
-                <Navbar.Brand href="/">Face Fit</Navbar.Brand>
+                <Navbar.Brand href="/">
+                    <img
+                        alt="FaceFit Logo"
+                        src={Logo}
+                        width="50"
+                        height="50"
+                        className="d-inline-block align-top"
+                    />{' '}
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse>
                     <Nav className="ml-auto">

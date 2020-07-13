@@ -70,19 +70,20 @@ const App = () => {
                     ></img>
                     {image ? (
                         <div className="output-image">
-                            {detectedFaces.map((detectedFace) => {
+                            {detectedFaces.length > 0 ? (detectedFaces.map((detectedFace) => {
                                 let width = detectedFace.detection._box.width;
                                 let height = detectedFace.detection._box.height;
                                 let x = detectedFace.detection._box.x;
                                 let y = detectedFace.detection._box.y;
 
                                 return (
-                                    <ProcessImage
-                                        image={image}
-                                        crop={{ width, height, x, y }}
-                                    />
+                                        <ProcessImage
+                                            image={image}
+                                            crop={{ width, height, x, y }}
+                                        />
                                 );
-                            })}
+                            })):
+                            <h1>Face Not Found</h1>}
                         </div>
                     ) : null}
                 </div>
