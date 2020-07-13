@@ -10,18 +10,44 @@
     border-radius: 5px;
 }
 
-.output-image {
-    text-align: center;
-}
-
-.output-image > img{
-        margin: 10px;
-}
-
 .input-image {
-    width: 80%;
+    width: 90%;
     height: 80%;
     margin: 3px
+}
+
+/*
+    Output Image
+*/
+.output-image {
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+
+    
+}
+
+
+/*
+    Cropped Image
+*/
+.cropped-image {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    height: 100%;
+}
+.cropped-image > img {
+    width: 100px !important;
+    height:100px  !important;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .app-container {

@@ -70,20 +70,27 @@ const App = () => {
                     ></img>
                     {image ? (
                         <div className="output-image">
-                            {detectedFaces.length > 0 ? (detectedFaces.map((detectedFace) => {
-                                let width = detectedFace.detection._box.width;
-                                let height = detectedFace.detection._box.height;
-                                let x = detectedFace.detection._box.x;
-                                let y = detectedFace.detection._box.y;
+                            {detectedFaces.length > 0 ? (
+                                detectedFaces.map((detectedFace) => {
+                                    let width =
+                                        detectedFace.detection._box.width;
+                                    let height =
+                                        detectedFace.detection._box.height;
+                                    let x = detectedFace.detection._box.x;
+                                    let y = detectedFace.detection._box.y;
 
-                                return (
-                                        <ProcessImage
-                                            image={image}
-                                            crop={{ width, height, x, y }}
-                                        />
-                                );
-                            })):
-                            <h1>Face Not Found</h1>}
+                                    return (
+                                        <div className="cropped-image">
+                                            <ProcessImage
+                                                image={image}
+                                                crop={{ width, height, x, y }}
+                                            />
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <h1>Face Not Found</h1>
+                            )}
                         </div>
                     ) : null}
                 </div>
