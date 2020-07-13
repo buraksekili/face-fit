@@ -2,19 +2,26 @@ import React, { useState, useEffect } from "react";
 import ProcessImage from "react-imgpro";
 import { loadModels, getFullFaceDescription } from "../faceApi";
 import { useIsMount } from "../Custom Hook/useIsMount";
+import Loading from "./Loading";
+import "./App.css";
 
 const App = () => {
     const [image, setImage] = useState(null);
     const [detectedFaces, setDetectedFaces] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const isMount = useIsMount();
     useEffect(() => {
         const checkIsMount = async () => {
             if (isMount) {
+                setIsLoading(true);
                 await loadModels();
+                setIsLoading(false);
             } else {
                 if (image) {
+                    setIsLoading(true);
                     await handleImage();
+                    setIsLoading(false);
                 }
             }
         };
@@ -30,50 +37,56 @@ const App = () => {
 
     return (
         <div>
-            <input
-                type="file"
-                multiple={false}
-                onClick={() => {
-                    setImage(null);
-                    setDetectedFaces([]);
-                }}
-                onChange={(event) => {
-                    setImage(URL.createObjectURL(event.target.files[0]));
-                }}
-            />
-            {
-                <div>
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <div className="app-container">
                     <div>
-                        <h1>Your Image</h1>
+                        <label for="img-input" className="img-input-label">
+                            Choose a photo.
+                        </label>
+                        <input
+                            style={{ display: "none" }}
+                            type="file"
+                            id="img-input"
+                            accept="image/*"
+                            multiple={false}
+                            onClick={() => {
+                                setImage(null);
+                                setDetectedFaces([]);
+                            }}
+                            onChange={(event) => {
+                                setImage(
+                                    URL.createObjectURL(event.target.files[0])
+                                );
+                            }}
+                        />
                     </div>
                     <img
                         id="input-img"
                         src={image ? image : "#"}
                         alt={image ? "face" : ""}
-                        style={{ width: "400px", height: "auto" }}
+                        className="input-image"
                     ></img>
-                </div>
-            }
-            {image ? (
-                <div>
-                    <div>
-                        <h1>Cropped Image</h1>
-                    </div>
-                    {detectedFaces.map((detectedFace) => {
-                        let width = detectedFace.detection._box.width;
-                        let height = detectedFace.detection._box.height;
-                        let x = detectedFace.detection._box.x;
-                        let y = detectedFace.detection._box.y;
+                    {image ? (
+                        <div className="output-image">
+                            {detectedFaces.map((detectedFace) => {
+                                let width = detectedFace.detection._box.width;
+                                let height = detectedFace.detection._box.height;
+                                let x = detectedFace.detection._box.x;
+                                let y = detectedFace.detection._box.y;
 
-                        return (
-                            <ProcessImage
-                                image={image}
-                                crop={{ width, height, x, y }}
-                            />
-                        );
-                    })}
+                                return (
+                                    <ProcessImage
+                                        image={image}
+                                        crop={{ width, height, x, y }}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : null}
                 </div>
-            ) : null}
+            )}
         </div>
     );
 };
