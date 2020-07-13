@@ -1,0 +1,46 @@
+import React from "react";
+import { Nav, Navbar } from "react-bootstrap";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+const Styles = styled.div`
+    .navbar {
+        background-color: grey;
+        margin-bottom: 20px;
+    }
+
+    a,
+    .navbar-nav {
+        color: black;
+        padding: 5px;
+        &:hover {
+            color: white;
+        }
+    }
+`;
+
+export const NavBar = () => {
+    return (
+        <Styles>
+            <Navbar expand="lg">
+                <Navbar.Brand href="/">Face Fit</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse>
+                    <Nav className="ml-auto">
+                        <Nav.Item>
+                            <Link to="/">Home</Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                            <Link to="/about">About</Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                            <Link to="/contact">Contact</Link>
+                        </Nav.Item>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        </Styles>
+    );
+};
