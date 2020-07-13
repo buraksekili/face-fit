@@ -2,7 +2,7 @@ import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Logo from "../assets/face_fit_logo.png"
+import Logo from "../assets/logo.png"
 
 const Styles = styled.div`
     .navbar {
@@ -28,7 +28,7 @@ export const NavBar = () => {
                     <img
                         alt="FaceFit Logo"
                         src={Logo}
-                        width="50"
+                        width="200"
                         height="50"
                         className="d-inline-block align-top"
                     />{' '}
