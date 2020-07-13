@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Muli:wght@300&display=swap');
+
+* {
+    font-family: 'Muli', sans-serif;
+}
+
+.img-input-label {
+    border: 1px solid rgb(207, 193, 193);
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.output-image {
+    text-align: center;
+}
+
+.output-image > img{
+        margin: 10px;
+}
+
+.input-image {
+    width: 80%;
+    height: 80%;
+    margin: 3px
+}
+
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
